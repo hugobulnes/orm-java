@@ -1,0 +1,5 @@
+org.hugobulnes.orm
+org.hugobulnes.orm.annotations
+org.hugobulnes.orm.properties
+org.hugobulnes.orm.query
+org.hugobulnes.orm.scanner
