@@ -1,6 +1,6 @@
-package org.hugobulnes.orm.properties;
+package com.hugobulnes.jdb.properties;
 
-import org.hugobulnes.orm.annotations.Column;
+import com.hugobulnes.jdb.annotations.Column;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.annotation.Annotation;

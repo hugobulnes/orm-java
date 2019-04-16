@@ -1,8 +1,8 @@
-package org.hugobulnes.orm.scanner;
+package com.hugobulnes.jdb.scanner;
 
-import org.hugobulnes.orm.annotations.Table;
-import org.hugobulnes.orm.properties.ClassProperty;
-import org.hugobulnes.orm.properties.Property;
+import com.hugobulnes.jdb.annotations.Table;
+import com.hugobulnes.jdb.properties.ClassProperty;
+import com.hugobulnes.jdb.properties.Property;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 

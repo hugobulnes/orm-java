@@ -1,7 +1,7 @@
-package org.hugobulnes.orm.scanner;
+package com.hugobulnes.jdb.scanner;
 
-import org.hugobulnes.orm.properties.FieldProperty;
-import org.hugobulnes.orm.properties.Property;
+import com.hugobulnes.jdb.properties.FieldProperty;
+import com.hugobulnes.jdb.properties.Property;
 import java.lang.reflect.Method;
 import java.util.Map;
 

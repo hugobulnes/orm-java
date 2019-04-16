@@ -1,10 +1,10 @@
-package org.hugobulnes.orm.scanner;
+package com.hugobulnes.jdb.scanner;
 
-import org.hugobulnes.orm.annotations.Column;
-import org.hugobulnes.orm.annotations.Id;
-import org.hugobulnes.orm.properties.FieldProperty;
-import org.hugobulnes.orm.properties.ClassProperty;
-import org.hugobulnes.orm.properties.Property;
+import com.hugobulnes.jdb.annotations.Column;
+import com.hugobulnes.jdb.annotations.Id;
+import com.hugobulnes.jdb.properties.FieldProperty;
+import com.hugobulnes.jdb.properties.ClassProperty;
+import com.hugobulnes.jdb.properties.Property;
 import java.lang.reflect.Field;
 import java.lang.annotation.Annotation;
 import java.util.Map;

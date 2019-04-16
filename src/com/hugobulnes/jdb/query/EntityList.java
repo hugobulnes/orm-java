@@ -1,4 +1,4 @@
-package org.hugobulnes.orm.query;
+package com.hugobulnes.jdb.query;
 
 import java.util.Iterator;
 

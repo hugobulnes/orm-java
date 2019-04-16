@@ -1,7 +1,7 @@
-import org.hugobulnes.orm.annotations.Table;
-import org.hugobulnes.orm.annotations.Column;
-import org.hugobulnes.orm.annotations.Id;
-import org.hugobulnes.orm.Model;
+import com.hugobulnes.jdb.annotations.Table;
+import com.hugobulnes.jdb.annotations.Column;
+import com.hugobulnes.jdb.annotations.Id;
+import com.hugobulnes.jdb.Model;
 
 
 /**

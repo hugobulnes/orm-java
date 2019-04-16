@@ -1,4 +1,6 @@
-package org.hugobulnes.orm;
+package com.hugobulnes.jdb;
+
+import com.hugobulnes.jdb.query.Query;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,8 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.ParameterMetaData;
-
-import org.hugobulnes.orm.query.Query;
 import java.util.Collection;
 
 public class DatabaseSession {
@@ -17,28 +17,39 @@ public class DatabaseSession {
 	private Connection connection = null;
 
 	//Won't use constructor to create connections
-    private DatabaseSession() throws SQLException, ClassNotFoundException  {        
+    private DatabaseSession(String host, String user, String password) 
+        throws SQLException, ClassNotFoundException  {        
         
         Class.forName("com.mysql.jdbc.Driver");
-        this.connection = DriverManager.getConnection(
-                ConnexionParameters.url, 
-                ConnexionParameters.user, 
-                ConnexionParameters.password
-                );     
+        this.connection = DriverManager.getConnection(host, user, password);     
            
     }
 
     /**
-     * Use this method to connect to the database 
+     * Use this method to connect to establish a connection to the database 
+     * passing the connection parameters. 
      * It will check if open connection exist or it will create a new one
+     * @param host String
+     * @param user String
+     * @param password String
+     * @return Connector
+     */
+    static public DatabaseSession connect(
+            String host, String user, String password) throws Exception {
+
+        if(DatabaseSession.openSession == null) {
+            DatabaseSession.openSession  = new DatabaseSession( 
+                    String host, String user, String password);
+        }
+
+        return DatabaseSession.openSession;
+    }
+
+    /**
+     * Use this method to connect to get an open connection to the database.
      * @return Connector
      */
     static public DatabaseSession connect() throws Exception {
-
-        if(DatabaseSession.openSession == null) {
-            DatabaseSession.openSession  = new DatabaseSession();
-        }
-
         return DatabaseSession.openSession;
     }
     
@@ -113,7 +124,6 @@ public class DatabaseSession {
        throws Exception{
        return null;
    }
-
     
    @Override
    public void finalize() throws SQLException{

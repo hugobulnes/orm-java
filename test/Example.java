@@ -1,5 +1,5 @@
-import org.hugobulnes.orm.query*;
-import org.hugobulnes.orm.*;
+import com.hugobulnes.jdb.query.*;
+import com.hugobulnes.jdb.*;
 
 /**
  * This is a simple example that retrieves all the students from the database

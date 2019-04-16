@@ -1,9 +1,9 @@
-package org.hugobulnes.orm;
+package com.hugobulnes.jdb;
 
-import org.hugobulnes.orm.properties.Property;
-import org.hugobulnes.orm.properties.FieldProperty;
-import org.hugobulnes.orm.properties.ClassProperty;
-import org.hugobulnes.orm.scanner.*;
+import com.hugobulnes.jdb.properties.Property;
+import com.hugobulnes.jdb.properties.FieldProperty;
+import com.hugobulnes.jdb.properties.ClassProperty;
+import com.hugobulnes.jdb.scanner.*;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,6 +1,6 @@
-package org.hugobulnes.orm.properties;
+package com.hugobulnes.jdb.properties;
 
-import org.hugobulnes.orm.properties.FieldProperty;
+import com.hugobulnes.jdb.properties.FieldProperty;
 import java.util.ArrayList;
 
 public class ClassProperty extends Property{

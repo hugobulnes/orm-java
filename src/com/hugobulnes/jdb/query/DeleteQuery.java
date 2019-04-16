@@ -1,8 +1,8 @@
-package org.hugobulnes.orm.query;
+package com.hugobulnes.jdb.query;
 
-import org.hugobulnes.orm.Model;
-import org.hugobulnes.orm.query.Filter;
-import org.hugobulnes.orm.DatabaseSession;
+import com.hugobulnes.jdb.Model;
+import com.hugobulnes.jdb.query.Filter;
+import com.hugobulnes.jdb.DatabaseSession;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;

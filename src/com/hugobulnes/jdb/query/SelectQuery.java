@@ -1,7 +1,7 @@
-package org.hugobulnes.orm.query;
+package com.hugobulnes.jdb.query;
 
-import org.hugobulnes.orm.Model;
-import org.hugobulnes.orm.DatabaseSession;
+import com.hugobulnes.jdb.Model;
+import com.hugobulnes.jdb.DatabaseSession;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
