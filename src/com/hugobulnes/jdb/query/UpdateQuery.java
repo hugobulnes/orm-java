@@ -10,8 +10,12 @@ public class UpdateQuery<T> extends EntityList<T> implements Query<T>{
     private Model<T> model;
     private Iterator<T> entityIterator;
 
-    public UpdateQuery(Class<T> model) throws Exception{
-        this.model = new Model(model);
+    public UpdateQuery(Class<T> model){
+        try{
+            this.model = new Model(model);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -27,47 +31,55 @@ public class UpdateQuery<T> extends EntityList<T> implements Query<T>{
      * @param DatabaseSession session
      * @return boolean
      */
-    public boolean execute(DatabaseSession session) throws Exception{
-
+    public boolean execute(DatabaseSession session){
         boolean ok = false;
+        PreparedStatement stmt = null;
+        try{
+            if(this.size() > 0){
 
-        if(this.size() > 0){
+                ok = true;
 
-            ok = true;
+                session.beginTransaction();
 
-            session.beginTransaction();
+                for(T entity: this){
 
-            for(T entity: this){
+                    String query = "UPDATE " + this.model.getTable() + " set ";
 
-                String query = "UPDATE " + this.model.getTable() + " set ";
-
-                String[] columns = this.model.columnsWithValues(entity);
-                for(int i = 0; i < columns.length; i++){
-                    query += columns[i] + " = ?";
-                    if(i != columns.length-1){
-                        query += ", ";
+                    String[] columns = this.model.columnsWithValues(entity);
+                    for(int i = 0; i < columns.length; i++){
+                        query += columns[i] + " = ?";
+                        if(i != columns.length-1){
+                            query += ", ";
+                        }
                     }
-                }
-                query += " where "+ this.model.getKeyColumn() + " = ?";
-            
-                PreparedStatement stmt = session.prepareStatement(query);
+                    query += " where "+ this.model.getKeyColumn() + " = ?";
+                
+                    stmt = session.prepareStatement(query);
 
-                int i = 0;
-                while(i < columns.length){
-                    stmt.setObject(
-                            i+1, this.model.getValue(entity, columns[i]));
-                    i++;
-                }
-                stmt.setObject(i+1, this.model.getKeyValue(entity));
+                    int i = 0;
+                    while(i < columns.length){
+                        stmt.setObject(
+                                i+1, this.model.getValue(entity, columns[i]));
+                        i++;
+                    }
+                    stmt.setObject(i+1, this.model.getKeyValue(entity));
 
-                stmt.executeUpdate(); 
+                    stmt.executeUpdate(); 
+                }
+
+                session.closeTransaction();
+
             }
-
-            session.closeTransaction();
-
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try{
+                if(stmt != null){
+                    stmt.close();
+                }
+            }catch(Exception se){ se.printStackTrace(); }
+            return ok;
         }
-
-        return ok;
     }
 
     /**

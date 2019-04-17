@@ -1,4 +1,4 @@
-import com.hugobulnes.jdb.query.*;
+import com.hugobulnes.jdb.query.SelectQuery;
 import com.hugobulnes.jdb.*;
 
 /**
@@ -12,7 +12,12 @@ public class Example{
         SelectQuery<Student> query = new SelectQuery(Student.class);
 
         //create a session object that will be used to execute the query
-        DatabaseSession session = DatabaseSession.connect();
+        DatabaseSession session = DatabaseSession.connect(
+                ConnexionParameters.url,
+                ConnexionParameters.user,
+                ConnexionParameters.password
+                );
+
 
         //Execute the query
         query.execute(session);

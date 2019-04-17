@@ -1,44 +1,23 @@
 import com.hugobulnes.jdb.annotations.Table;
 import com.hugobulnes.jdb.annotations.Column;
 import com.hugobulnes.jdb.annotations.Id;
-import com.hugobulnes.jdb.Model;
 
-
-/**
- * This is an example class that that uses specific annotations to map 
- * different aspects of the database. The database will have a table `profile`
- * that will be mapped to this class. For the correct use of the framework,
- * the custom class need to have setters and getter for all the class 
- * variables.
- *
- */
-@Table("profile")
+@Table("student")
 public class Student{
 
     @Id
-    @Column("pro_id")
+    @Column("id")
     private int id;
-    @Column("pro_userName")
+    @Column("userName")
 	private String userName;
-    @Column("pro_password")
+    @Column("password")
 	private String password;   
-    @Column("pro_type")
-	private int type;   
-	@Column("pro_name")
-    private String name;
+    @Column("age")
+	private int age;   
 	
-	/**
-	 * Default constructor
-	 */
 	public Student(){		
     }
 
-	public Student(String name, String userName, String password, int type){		
-        this.userName = userName;
-        this.password = password;
-        this.type = type;
-        this.name = name;
-	}
 
     /**
 	 * Get User Profile Id

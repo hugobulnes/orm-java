@@ -19,52 +19,64 @@ public class EntityList<T> implements Iterable<T>{
         return this.size;
     }
 
-    public T get(int pos) throws Exception{
-        if(pos < 0 || pos > this.size){
-            throw new IndexOutOfBoundsException();
-        }
+    public T get(int pos){
+        try{
+            if(pos < 0 || pos > this.size){
+                throw new IndexOutOfBoundsException();
+            }
 
-        Node ptr = head;
-        for(int index = 0; index < pos; index++){
-            ptr = ptr.next;
-        }
-        return ptr.element;
-    }
-
-    public void add(int pos, T element) throws Exception{
-        if(pos < 0 || pos > this.size){
-            throw new IndexOutOfBoundsException();
-        }
-        Node node = new Node(element);
-        if(pos == 0){
-            node.next = head;
-            head = node;
-        }else{
-            //Traverse
             Node ptr = head;
-            for(int index = 0; index < pos -1; index++){
+            for(int index = 0; index < pos; index++){
                 ptr = ptr.next;
             }
-            node.next = ptr.next;
-            ptr.next = node;
+            return ptr.element;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
         }
-        this.size++;
     }
 
-    public void add(T element) throws Exception{
-
-        Node node = new Node(element);
-        
-        if(this.head == null){
-            this.head = node;
-        }else{
-            Node ptr = head;
-            while(ptr.next != null){
-                ptr = ptr.next;
+    public void add(int pos, T element){
+        try{
+            if(pos < 0 || pos > this.size){
+                throw new IndexOutOfBoundsException();
             }
-            ptr.next = node;
-        }   
-        this.size++;
+            Node node = new Node(element);
+            if(pos == 0){
+                node.next = head;
+                head = node;
+            }else{
+                //Traverse
+                Node ptr = head;
+                for(int index = 0; index < pos -1; index++){
+                    ptr = ptr.next;
+                }
+                node.next = ptr.next;
+                ptr.next = node;
+            }
+            this.size++;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void add(T element){
+        try{
+            Node node = new Node(element);
+            
+            if(this.head == null){
+                this.head = node;
+            }else{
+                Node ptr = head;
+                while(ptr.next != null){
+                    ptr = ptr.next;
+                }
+                ptr.next = node;
+            }   
+            this.size++;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public Iterator<T> iterator(){

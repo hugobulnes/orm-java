@@ -35,13 +35,15 @@ public class DatabaseSession {
      * @return Connector
      */
     static public DatabaseSession connect(
-            String host, String user, String password) throws Exception {
-
-        if(DatabaseSession.openSession == null) {
-            DatabaseSession.openSession  = new DatabaseSession( 
-                    String host, String user, String password);
+            String host, String user, String password) {
+        try{
+            if(DatabaseSession.openSession == null) {
+                DatabaseSession.openSession = new DatabaseSession(
+                        host, user, password);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
-
         return DatabaseSession.openSession;
     }
 
@@ -49,7 +51,7 @@ public class DatabaseSession {
      * Use this method to connect to get an open connection to the database.
      * @return Connector
      */
-    static public DatabaseSession connect() throws Exception {
+    static public DatabaseSession connect() {
         return DatabaseSession.openSession;
     }
     

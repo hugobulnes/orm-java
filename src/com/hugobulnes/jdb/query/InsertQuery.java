@@ -10,8 +10,12 @@ public class InsertQuery<T> extends EntityList<T> implements Query<T>{
     private Model<T> model;
     //private ArrayList<T> entities;
 
-    public InsertQuery(Class<T> model) throws Exception{
-        this.model = new Model(model);
+    public InsertQuery(Class<T> model){
+        try{
+            this.model = new Model(model);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -27,45 +31,56 @@ public class InsertQuery<T> extends EntityList<T> implements Query<T>{
      * @param connection Connection
      * @return boolean
      */
-    public boolean execute(DatabaseSession session) throws Exception{
-
+    public boolean execute(DatabaseSession session){
         boolean ok = false;
-        if(this.size() > 0){
+        PreparedStatement stmt = null;
+        ResultSet newKeys = null;
+        try{
+            if(this.size() > 0){
 
-            PreparedStatement stmt = session.prepareForInsert(this.compose());
-            
-            //Set placeholder values for each entity store in the query
-            for(T entity: this){
+                stmt = session.prepareForInsert(this.compose());
+                
+                //Set placeholder values for each entity store in the query
+                for(T entity: this){
 
-                Object[] values = this.model.toArray(entity);
+                    Object[] values = this.model.toArray(entity);
 
-                for(int e = 0; e < values.length; e++){
-                    stmt.setObject(e+1, values[e] );
+                    for(int e = 0; e < values.length; e++){
+                        stmt.setObject(e+1, values[e] );
+                    }
+                    stmt.addBatch();
                 }
-                stmt.addBatch();
-            }
 
-            int[] success = stmt.executeBatch();
+                int[] success = stmt.executeBatch();
 
-            ResultSet newKeys = stmt.getGeneratedKeys();
+                newKeys = stmt.getGeneratedKeys();
 
-            //Add othe keys to the entities references
-            int i = 0;
-            for(T entity : this){
-                ok = false;
-                if(success[i++] > 0){
-                    newKeys.next();                
-                    this.model.setKey(entity, newKeys.getInt(1));
-                    ok = true;
+                //Add othe keys to the entities references
+                int i = 0;
+                for(T entity : this){
+                    ok = false;
+                    if(success[i++] > 0){
+                        newKeys.next();                
+                        this.model.setKey(entity, newKeys.getInt(1));
+                        ok = true;
+                    }
                 }
+
+            }else{
+               throw new Error("There are no entities to process");
             }
-            newKeys.close();
-
-            stmt.close();
-
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try{
+                if(newKeys != null){
+                    newKeys.close();
+                }
+                if(stmt != null){
+                    stmt.close();
+                }
+            }catch(Exception se){ se.printStackTrace(); }
             return ok;
-        }else{
-           throw new Error("There are no entities to process");
         }
     }
 

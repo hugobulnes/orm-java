@@ -13,9 +13,13 @@ public class DeleteQuery<T> implements Query<T>{
     private ArrayList<Filter> filters;
     //private ArrayList<T> entities;
 
-    public DeleteQuery(Class<T> model) throws Exception{
-        this.model = new Model(model);
-        this.filters = new ArrayList();
+    public DeleteQuery(Class<T> model){
+        try{
+            this.model = new Model(model);
+            this.filters = new ArrayList();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -39,28 +43,36 @@ public class DeleteQuery<T> implements Query<T>{
      * @param connection Connection
      * @return boolean
      */
-    public boolean execute(DatabaseSession session) throws Exception{
-
+    public boolean execute(DatabaseSession session){
         boolean ok = false;
+        PreparedStatement stmt = null;
+        try{
 
-        PreparedStatement stmt = session.prepareForSelect(this.compose());
+            stmt = session.prepareForSelect(this.compose());
 
-        for(int i = 0; i < this.filters.size(); i++){
-            Object o = this.filters.get(i).getValue();
+            for(int i = 0; i < this.filters.size(); i++){
+                Object o = this.filters.get(i).getValue();
 
-            if(o == null){
-                throw new Exception("Filter does not have a value set");
+                if(o == null){
+                    throw new Exception("Filter does not have a value set");
+                }
+
+                stmt.setObject(i+1, o );
             }
+            int success = stmt.executeUpdate();
 
-            stmt.setObject(i+1, o );
+            ok = success > 0 ? true : false;
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try{
+                if(stmt != null){
+                    stmt.close();
+                }
+            }catch(Exception se){ se.printStackTrace(); }
+            return ok;
         }
-        int success = stmt.executeUpdate();
-
-        ok = success > 0 ? true : false;
-
-        stmt.close();
-
-        return ok;
     }
 
     /**

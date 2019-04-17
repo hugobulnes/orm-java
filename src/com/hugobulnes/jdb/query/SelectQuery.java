@@ -13,9 +13,13 @@ public class SelectQuery<T> extends EntityList<T> implements Query<T>{
     private Model<T> model;
     private String[] selectColumns;
 
-    public SelectQuery(Class<T> model) throws Exception{
-        this.model = new Model(model);
-        this.filters = new ArrayList();
+    public SelectQuery(Class<T> model){
+        try{
+            this.model = new Model(model);
+            this.filters = new ArrayList();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -48,48 +52,61 @@ public class SelectQuery<T> extends EntityList<T> implements Query<T>{
      * @param DatabaseSession session
      * @return boolean
      */
-    public boolean execute(DatabaseSession session) throws Exception{
-
+    public boolean execute(DatabaseSession session){
         boolean ok = false;
-        PreparedStatement stmt = session.prepareForSelect(this.compose());
+        PreparedStatement stmt = null;
+        ResultSet results = null;
+        try{
+            stmt = session.prepareForSelect(this.compose());
+            
+            for(int i = 0; i < this.filters.size(); i++){
+                stmt.setObject(i+1, this.filters.get(i).getValue() );
+            }
+
+            results = stmt.executeQuery();
         
-        for(int i = 0; i < this.filters.size(); i++){
-            stmt.setObject(i+1, this.filters.get(i).getValue() );
-        }
-
-        ResultSet results = stmt.executeQuery();
-    
-        results.last();
-        int last = results.getRow(); 
-        results.beforeFirst();
-
-        if(last > 0 ){
-
-            ResultSetMetaData metadata = results.getMetaData();
-            int colSize = metadata.getColumnCount();
+            results.last();
+            int last = results.getRow(); 
             results.beforeFirst();
 
-            results.next();
-            while(results.isAfterLast() == false){
-                T entity = this.model.create();
-                        
-                for(int i = 1; i <= colSize; i++){
-                    String colName = metadata.getColumnName(i);
-                
-                    Object o = results.getObject(
-                            colName, this.model.fieldTypeFromColumn(colName));
+            if(last > 0 ){
 
-                    this.model.setValue(entity, colName, o);
-                } 
-
-                this.add(entity);
+                ResultSetMetaData metadata = results.getMetaData();
+                int colSize = metadata.getColumnCount();
+                results.beforeFirst();
 
                 results.next();
-            }
-            ok = true;
-        }
+                while(results.isAfterLast() == false){
+                    T entity = this.model.create();
+                            
+                    for(int i = 1; i <= colSize; i++){
+                        String colName = metadata.getColumnName(i);
+                    
+                        Object o = results.getObject(
+                                colName, this.model.fieldTypeFromColumn(colName));
 
-        return ok;
+                        this.model.setValue(entity, colName, o);
+                    } 
+
+                    this.add(entity);
+
+                    results.next();
+                }
+                ok = true;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try{
+                if(results != null){
+                    results.close();
+                }
+                if(stmt != null){
+                    stmt.close();
+                }
+            }catch(Exception se){ se.printStackTrace(); }
+            return ok;
+        }
     }
 
     /**
